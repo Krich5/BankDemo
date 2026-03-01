@@ -341,41 +341,7 @@ nav {
 .setup-status.error   { background: #fef2f2; border-color: #fecaca; color: #7f1d1d; display: flex; }
 .setup-status.success { background: #f0fdf4; border-color: #bbf7d0; color: #14532d; display: flex; }
 
-.setup-divider {
-  font-size: 0.7rem;
-  color: #c4cad6;
-  text-align: center;
-  margin: 1.3rem 0 0.8rem;
-  position: relative;
-}
-.setup-divider::before, .setup-divider::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 42%;
-  height: 1px;
-  background: #e8ebf0;
-}
-.setup-divider::before { left: 0; }
-.setup-divider::after  { right: 0; }
 
-.api-note {
-  background: #f8fafc;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  padding: 0.85rem 1rem;
-  font-size: 0.74rem;
-  color: var(--gray);
-  line-height: 1.65;
-}
-.api-note strong { color: var(--dark); }
-.api-note code {
-  background: #e8ecf2;
-  border-radius: 4px;
-  padding: 1px 5px;
-  font-size: 0.72rem;
-  color: var(--dark);
-}
 
 /* Spinner */
 .spinner {
@@ -767,13 +733,7 @@ nav {
       Connect &amp; Start Demo →
     </button>
 
-    <div class="setup-divider">how it works</div>
 
-    <div class="api-note">
-      Enter your agent email and Bearer token — the system automatically looks up your
-      Webex agent profile and active call, then handles recording pause/resume with no
-      additional setup required. <strong>Just email + token.</strong>
-    </div>
   </div>
 </div>
 ```
@@ -1034,12 +994,12 @@ async function startDemo() {
       setStatus('error', 'Invalid or expired Bearer token. Get a fresh one from developer.webex.com.');
     } else if (e.message.includes('no agent') || e.message.includes('No user')) {
       setStatus('error', `No Webex user found for "${email}". Check the email address.`);
-    } else if (e.message.includes('no active') || e.message.includes('No active')) {
-      setStatus('error', 'Agent found but no active call detected. Make sure a call is in progress in WxCC.');
-    } else if (e.message.includes('Failed to fetch') || e.message.includes('NetworkError')) {
-      setStatus('error', 'Network error — check CORS settings or run via a proxy. See console for details.');
+    } else if (e.message.includes('No active') || e.message.includes('no active')) {
+      setStatus('error', 'Agent found, but no active call detected. Make sure the agent has a connected call in WxCC before running the demo.');
+    } else if (e.message.includes('Failed to fetch') || e.message.includes('NetworkError') || e.message.includes('CORS')) {
+      setStatus('error', 'Network/CORS error — the browser may be blocking the API call. Try hosting on a server rather than opening the file directly. See console for details.');
     } else {
-      setStatus('error', `API error: ${e.message}. Check the browser console for details.`);
+      setStatus('error', e.message);
     }
   } finally {
     btn.disabled = false;
@@ -1071,29 +1031,48 @@ async function lookupAgentByEmail(email, token) {
 
 /* ═══════════════════════════════════════════════════
    API CALL 2 — Find Active Task (Call) from Agent ID
-   GET {baseUrl}/v1/contactCenter/tasks?agentId={id}&state=active
-
-   ⚠️  Verify this endpoint path for your WxCC version.
-       Some deployments use different query params or paths.
-       Ref: developer.webex.com/docs/contact-center
+   Tries multiple known WxCC endpoint formats in order.
 ═══════════════════════════════════════════════════ */
 async function findActiveTask(agentId, token) {
-  const url = `${APP.baseUrl}/v1/contactCenter/tasks?agentId=${encodeURIComponent(agentId)}&state=active`;
+  // WxCC has changed API paths across versions — try each in order
+  const endpoints = [
+    // WxCC v2 / newer
+    `${APP.baseUrl}/v2/tasks?agentId=${encodeURIComponent(agentId)}&status=active`,
+    `${APP.baseUrl}/v2/tasks?agentId=${encodeURIComponent(agentId)}&state=connected`,
+    // WxCC v1
+    `${APP.baseUrl}/v1/contactCenter/tasks?agentId=${encodeURIComponent(agentId)}&status=active`,
+    `${APP.baseUrl}/v1/contactCenter/tasks?agentId=${encodeURIComponent(agentId)}&state=active`,
+    // Webex CC via webexapis.com
+    `https://webexapis.com/v1/contactCenter/tasks?agentId=${encodeURIComponent(agentId)}&status=active`,
+  ];
 
-  const res = await fetch(url, {
-    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
-  });
+  let lastError = '';
+  for (const url of endpoints) {
+    console.log('[Webex] Trying task endpoint:', url);
+    try {
+      const res = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+      });
+      if (res.status === 401) throw new Error('401 - Invalid token');
+      if (res.status === 404 || res.status === 405) { lastError = `${res.status}`; continue; } // try next
+      if (!res.ok) { lastError = `${res.status} ${res.statusText}`; continue; }
 
-  if (res.status === 401) throw new Error('401 - Invalid token');
-  if (!res.ok) throw new Error(`Tasks API ${res.status} ${res.statusText}`);
+      const data = await res.json();
+      const task = data.data?.[0] || data.items?.[0] || data.tasks?.[0] || data[0];
+      if (!task) { lastError = 'no active task in response'; continue; }
 
-  const data = await res.json();
-  // Handle both common WxCC response shapes
-  const task = data.data?.[0] || data.items?.[0] || data.tasks?.[0];
-  if (!task) throw new Error('No active call found for this agent');
+      APP.taskId = task.id || task.taskId || task.interactionId;
+      if (!APP.taskId) { lastError = 'task found but no ID field'; continue; }
 
-  APP.taskId = task.id;
-  console.log('[Webex] ✅ Active task:', APP.taskId);
+      console.log('[Webex] ✅ Active task found via:', url, '→', APP.taskId);
+      return; // success
+    } catch(e) {
+      if (e.message.includes('401')) throw e; // don't retry bad token
+      lastError = e.message;
+    }
+  }
+
+  throw new Error(`No active call found for this agent. Make sure a call is connected in WxCC. (Last error: ${lastError})`);
 }
 
 /* ═══════════════════════════════════════════════════
