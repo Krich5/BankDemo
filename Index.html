@@ -8,34 +8,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --brand:   #0057B8;
-      --brand2:  #0072E5;
-      --accent:  #00B4D8;
-      --dark:    #0A1628;
-      --dark2:   #142240;
-      --white:   #ffffff;
-      --cream:   #F4F7FB;
-      --gray:    #6B7A99;
-      --border:  #DDE3EF;
-      --success: #059669;
-      --warn:    #D97706;
-      --danger:  #DC2626;
-      --radius:  10px;
-      --shadow:  0 2px 20px rgba(10,22,40,0.10);
-      --shadow-lg: 0 8px 40px rgba(10,22,40,0.15);
+      --brand:     #0057B8;
+      --brand2:    #0072E5;
+      --accent:    #00B4D8;
+      --dark:      #0A1628;
+      --dark2:     #142240;
+      --white:     #ffffff;
+      --cream:     #F4F7FB;
+      --gray:      #6B7A99;
+      --border:    #DDE3EF;
+      --success:   #059669;
+      --danger:    #DC2626;
+      --radius:    10px;
+      --shadow:    0 2px 20px rgba(10,22,40,0.10);
+      --shadow-lg: 0 8px 40px rgba(10,22,40,0.16);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      min-height: 100vh;
     }
 
 ```
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--cream);
-  color: var(--dark);
-  min-height: 100vh;
-}
-
-/* ── NAV ────────────────────────────────────────────── */
+/* ─── NAV ─────────────────────────────────────────── */
 nav {
   background: var(--dark);
   display: flex;
@@ -48,40 +45,25 @@ nav {
   z-index: 100;
   box-shadow: 0 2px 16px rgba(0,0,0,0.25);
 }
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.nav-logo img {
-  height: 36px;
-  width: auto;
-  display: block;
-}
-.nav-logo-fallback {
+.nav-logo { display: flex; align-items: center; gap: 12px; }
+.nav-logo img { height: 36px; width: auto; display: block; }
+.nav-logo-text {
   font-family: 'Manrope', sans-serif;
   color: white;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
+  display: none;
 }
-.nav-logo-sep {
-  width: 1px;
-  height: 28px;
-  background: rgba(255,255,255,0.15);
-}
+.nav-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.15); }
 .nav-product {
   font-family: 'Manrope', sans-serif;
-  color: rgba(255,255,255,0.65);
-  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.84rem;
   font-weight: 500;
   letter-spacing: 0.02em;
 }
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.nav-user-pill {
+.nav-right { display: flex; align-items: center; gap: 1rem; }
+.nav-pill {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 20px;
@@ -89,165 +71,40 @@ nav {
   font-size: 0.78rem;
   color: rgba(255,255,255,0.65);
   display: none;
-  max-width: 200px;
+  max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-/* ── GEAR / API CONFIG BUTTON (always visible in nav) ── */
-#gear-btn {
-  background: rgba(255,255,255,0.08);
-  border: 1.5px solid rgba(255,255,255,0.18);
-  border-radius: 8px;
-  padding: 6px 14px;
-  color: white;
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  transition: background 0.2s;
-  font-family: 'Inter', sans-serif;
-}
-#gear-btn:hover { background: rgba(255,255,255,0.16); }
-.gear-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #ef4444;
-  flex-shrink: 0;
-}
-.gear-dot.ok { background: #22c55e; }
-
-/* ── MODAL BACKDROP ─────────────────────────────────── */
-.modal-backdrop {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(10,22,40,0.65);
-  backdrop-filter: blur(4px);
-  z-index: 500;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-.modal-backdrop.open { display: flex; }
-.modal {
-  background: var(--dark);
-  border-radius: 16px;
-  width: 100%;
-  max-width: 490px;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid rgba(255,255,255,0.08);
-  animation: modalIn 0.25s ease;
-}
-@keyframes modalIn { from { transform: translateY(14px); opacity:0; } to { transform:none; opacity:1; } }
-.modal-header {
-  padding: 1.4rem 1.6rem 1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.modal-header h3 {
-  font-family: 'Manrope', sans-serif;
-  color: white;
-  font-size: 1rem;
-  font-weight: 700;
-}
-.modal-close {
+/* Small gear button — always in nav for quick access */
+.nav-gear {
   background: rgba(255,255,255,0.07);
-  border: none;
-  color: rgba(255,255,255,0.45);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 8px;
+  padding: 5px 10px;
+  color: rgba(255,255,255,0.5);
   cursor: pointer;
-  width: 28px; height: 28px;
-  border-radius: 6px;
-  font-size: 1rem;
+  font-size: 0.88rem;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 5px;
+  font-family: 'Inter', sans-serif;
   transition: background 0.15s;
 }
-.modal-close:hover { background: rgba(255,255,255,0.14); color: white; }
-.modal-body { padding: 1.4rem 1.6rem; }
-.modal-footer { padding: 0 1.6rem 1.4rem; }
-
-.demo-notice {
-  background: rgba(0,180,216,0.09);
-  border: 1px solid rgba(0,180,216,0.22);
-  border-radius: 9px;
-  padding: 0.8rem 1rem;
-  font-size: 0.77rem;
-  color: rgba(255,255,255,0.6);
-  line-height: 1.65;
-  margin-bottom: 1.2rem;
+.nav-gear:hover { background: rgba(255,255,255,0.13); color: white; }
+.nav-gear-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
 }
-.demo-notice strong { color: var(--accent); }
+.nav-gear-dot.ok { background: #22c55e; }
 
-.cfg-status-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.77rem;
-  color: rgba(255,255,255,0.4);
-  padding: 0.55rem 0.85rem;
-  background: rgba(255,255,255,0.03);
-  border-radius: 7px;
-  margin-bottom: 1.1rem;
-  border: 1px solid rgba(255,255,255,0.06);
-}
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; flex-shrink: 0; }
-.status-dot.ok { background: #22c55e; }
-
-.cfg-field { margin-bottom: 1rem; }
-.cfg-field label {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.4);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.38rem;
-}
-.cfg-field input {
-  width: 100%;
-  background: rgba(255,255,255,0.06);
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  padding: 0.62rem 0.9rem;
-  color: white;
-  font-family: 'Inter', monospace;
-  font-size: 0.81rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.cfg-field input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); }
-.cfg-field input::placeholder { color: rgba(255,255,255,0.18); }
-.cfg-hint { font-size: 0.7rem; color: rgba(255,255,255,0.25); margin-top: 0.28rem; line-height: 1.55; }
-
-.btn-save {
-  width: 100%;
-  background: linear-gradient(135deg, var(--brand), var(--brand2));
-  color: white;
-  border: none;
-  padding: 0.8rem;
-  border-radius: 8px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 0.92rem;
-  cursor: pointer;
-  transition: opacity 0.15s, transform 0.15s;
-  box-shadow: 0 4px 14px rgba(0,87,184,0.3);
-}
-.btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
-
-/* ── PAGES ────────────────────────────────────── */
-.page { display: none; animation: fadeIn 0.35s ease; }
+/* ─── PAGES ───────────────────────────────────────── */
+.page { display: none; animation: fadeIn 0.3s ease; }
 .page.active { display: block; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+@keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
 
-/* ── LANDING ──────────────────────────────────── */
+/* ─── LANDING ─────────────────────────────────────── */
 .hero {
   background: linear-gradient(150deg, var(--dark) 0%, var(--dark2) 60%, #0d2a5e 100%);
   min-height: calc(100vh - 62px);
@@ -258,7 +115,7 @@ nav {
   position: relative;
   overflow: hidden;
 }
-.hero-grid-bg {
+.hero-grid {
   position: absolute; inset: 0;
   background-image:
     linear-gradient(rgba(0,87,184,0.06) 1px, transparent 1px),
@@ -269,7 +126,7 @@ nav {
   position: absolute;
   width: 700px; height: 700px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,114,229,0.13) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(0,114,229,0.12) 0%, transparent 65%);
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -284,7 +141,7 @@ nav {
   position: relative;
   z-index: 1;
 }
-.hero-eyebrow {
+.eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -292,14 +149,14 @@ nav {
   border: 1px solid rgba(0,180,216,0.22);
   border-radius: 20px;
   padding: 5px 14px;
-  font-size: 0.73rem;
+  font-size: 0.72rem;
   color: var(--accent);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 1.1rem;
 }
-.hero-eyebrow::before {
+.eyebrow::before {
   content: '';
   width: 6px; height: 6px;
   border-radius: 50%;
@@ -309,9 +166,9 @@ nav {
   font-family: 'Manrope', sans-serif;
   font-size: 2.85rem;
   font-weight: 800;
-  color: var(--white);
+  color: white;
   line-height: 1.15;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.1rem;
 }
 .hero-text h1 span {
   background: linear-gradient(135deg, var(--accent), var(--brand2));
@@ -320,42 +177,30 @@ nav {
   background-clip: text;
 }
 .hero-text p {
-  color: rgba(255,255,255,0.58);
-  font-size: 0.98rem;
-  line-height: 1.78;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.97rem;
+  line-height: 1.8;
   margin-bottom: 2.2rem;
 }
-.hero-btns { display: flex; gap: 0.85rem; flex-wrap: wrap; }
 .btn-primary {
   background: linear-gradient(135deg, var(--brand), var(--brand2));
   color: white;
   border: none;
-  padding: 0.82rem 1.75rem;
+  padding: 0.88rem 1.9rem;
   border-radius: var(--radius);
   font-family: 'Manrope', sans-serif;
-  font-size: 0.94rem;
+  font-size: 0.96rem;
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
   box-shadow: 0 4px 16px rgba(0,87,184,0.35);
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,87,184,0.45); }
-.btn-ghost {
-  background: transparent;
-  color: rgba(255,255,255,0.68);
-  border: 1.5px solid rgba(255,255,255,0.2);
-  padding: 0.8rem 1.55rem;
-  border-radius: var(--radius);
-  font-family: 'Manrope', sans-serif;
-  font-size: 0.94rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.btn-ghost:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.35); color: white; }
+.btn-primary:disabled { opacity: 0.65; transform: none; cursor: not-allowed; }
+.btn-full { width: 100%; justify-content: center; }
 
 .hero-panel {
   background: rgba(255,255,255,0.04);
@@ -364,8 +209,8 @@ nav {
   padding: 1.8rem;
   backdrop-filter: blur(8px);
 }
-.hero-panel-label {
-  font-size: 0.68rem;
+.panel-label {
+  font-size: 0.67rem;
   color: var(--accent);
   font-weight: 700;
   text-transform: uppercase;
@@ -374,89 +219,184 @@ nav {
 }
 .flow-row {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0.62rem 0;
+  align-items: center;
+  padding: 0.6rem 0;
   border-bottom: 1px solid rgba(255,255,255,0.06);
-  font-size: 0.84rem;
+  font-size: 0.83rem;
 }
 .flow-row:last-child { border: none; }
-.flow-lbl { color: rgba(255,255,255,0.42); }
-.flow-val { font-weight: 600; }
-.c-blue { color: var(--accent); }
-.c-yellow { color: #fbbf24; }
-.c-green { color: #34d399; }
+.flow-lbl { color: rgba(255,255,255,0.4); }
+.c-blue   { color: var(--accent); font-weight: 600; }
+.c-yellow { color: #fbbf24; font-weight: 600; }
+.c-green  { color: #34d399; font-weight: 600; }
 
-/* ── LOGIN ────────────────────────────────────── */
-.auth-wrap {
+/* ─── SETUP SCREEN (the key new page) ────────────── */
+.setup-wrap {
   min-height: calc(100vh - 62px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 3rem 1rem;
+  /* subtle dark gradient so it feels intentional, not same as landing */
+  background: linear-gradient(160deg, #f0f4fa 0%, var(--cream) 100%);
 }
-.auth-card {
+.setup-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: var(--shadow-lg);
-  padding: 2.4rem 2.6rem;
   width: 100%;
-  max-width: 400px;
-  border-top: 4px solid var(--brand);
+  max-width: 440px;
+  overflow: hidden;
 }
-.auth-logo-area { margin-bottom: 1.8rem; }
-.auth-logo-area img { height: 38px; width: auto; margin-bottom: 0.9rem; display: block; }
-.auth-logo-area h2 {
+.setup-card-header {
+  background: var(--dark);
+  padding: 1.8rem 2rem 1.5rem;
+}
+.setup-card-header img {
+  height: 36px;
+  width: auto;
+  display: block;
+  margin-bottom: 1rem;
+}
+.setup-card-header h2 {
   font-family: 'Manrope', sans-serif;
-  font-size: 1.18rem;
+  color: white;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--dark);
+  margin-bottom: 0.3rem;
 }
-.auth-logo-area p { font-size: 0.82rem; color: var(--gray); margin-top: 0.22rem; }
+.setup-card-header p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.55;
+}
+.setup-card-body { padding: 1.8rem 2rem; }
 
-.form-group { margin-bottom: 1.1rem; }
-.form-group label {
+.field-group { margin-bottom: 1.25rem; }
+.field-group label {
   display: block;
   font-size: 0.79rem;
   font-weight: 600;
   color: var(--dark);
   margin-bottom: 0.38rem;
 }
-.form-group input {
+.field-group input {
   width: 100%;
-  padding: 0.7rem 1rem;
+  padding: 0.72rem 1rem;
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
   font-family: 'Inter', sans-serif;
   font-size: 0.91rem;
   color: var(--dark);
   background: #FAFBFC;
-  transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-.form-group input:focus {
+.field-group input:focus {
   border-color: var(--brand2);
   box-shadow: 0 0 0 3px rgba(0,114,229,0.11);
   background: white;
 }
-.form-hint { font-size: 0.72rem; color: var(--gray); margin-top: 0.28rem; }
-.btn-full { width: 100%; justify-content: center; margin-top: 0.5rem; }
-.auth-link {
-  display: block;
-  margin-top: 1.1rem;
+.field-hint {
+  font-size: 0.71rem;
+  color: var(--gray);
+  margin-top: 0.3rem;
+  line-height: 1.5;
+}
+
+/* Token field with show/hide toggle */
+.token-wrap { position: relative; }
+.token-wrap input { padding-right: 3rem; }
+.token-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gray);
+  font-size: 0.8rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.token-toggle:hover { color: var(--brand); }
+
+/* Status/error inline in setup */
+.setup-status {
+  border-radius: 9px;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  display: none;
+  align-items: flex-start;
+  gap: 9px;
+  border: 1px solid;
+}
+.setup-status.info    { background: #eff6ff; border-color: #bfdbfe; color: #1e40af; display: flex; }
+.setup-status.error   { background: #fef2f2; border-color: #fecaca; color: #7f1d1d; display: flex; }
+.setup-status.success { background: #f0fdf4; border-color: #bbf7d0; color: #14532d; display: flex; }
+
+.setup-divider {
+  font-size: 0.7rem;
+  color: #c4cad6;
   text-align: center;
+  margin: 1.3rem 0 0.8rem;
+  position: relative;
+}
+.setup-divider::before, .setup-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 42%;
+  height: 1px;
+  background: #e8ebf0;
+}
+.setup-divider::before { left: 0; }
+.setup-divider::after  { right: 0; }
+
+.api-note {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 0.85rem 1rem;
   font-size: 0.74rem;
   color: var(--gray);
+  line-height: 1.65;
 }
-.auth-link a { color: var(--brand2); text-decoration: none; font-weight: 600; }
+.api-note strong { color: var(--dark); }
+.api-note code {
+  background: #e8ecf2;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.72rem;
+  color: var(--dark);
+}
 
-/* ── PAYMENT ──────────────────────────────────── */
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── PAYMENT ─────────────────────────────────────── */
 .payment-wrap {
   max-width: 800px;
   margin: 0 auto;
   padding: 2.5rem 1.5rem 4rem;
 }
-.payment-header { margin-bottom: 1.6rem; }
+.payment-header { margin-bottom: 1.5rem; }
 .payment-header h2 {
   font-family: 'Manrope', sans-serif;
   font-size: 1.65rem;
@@ -464,7 +404,7 @@ nav {
   color: var(--dark);
   margin-bottom: 0.22rem;
 }
-.payment-header p { color: var(--gray); font-size: 0.86rem; }
+.payment-header p { color: var(--gray); font-size: 0.85rem; }
 .payment-grid {
   display: grid;
   grid-template-columns: 1.35fr 1fr;
@@ -483,8 +423,8 @@ nav {
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--dark);
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.72rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.7rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -499,7 +439,7 @@ nav {
   color: white;
   position: relative;
   overflow: hidden;
-  min-height: 146px;
+  min-height: 144px;
 }
 .card-visual::before {
   content: '';
@@ -518,8 +458,8 @@ nav {
   background: rgba(0,180,216,0.1);
 }
 .card-issuer {
-  color: rgba(255,255,255,0.45);
-  font-size: 0.68rem;
+  color: rgba(255,255,255,0.42);
+  font-size: 0.67rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 1rem;
@@ -530,10 +470,11 @@ nav {
   font-weight: 300;
   margin-bottom: 0.9rem;
 }
-.card-footer { display: flex; justify-content: space-between; font-size: 0.75rem; }
-.card-footer-lbl { color: rgba(255,255,255,0.38); font-size: 0.63rem; margin-bottom: 2px; }
-.card-footer-val { color: white; font-weight: 500; }
-/* Recording bar */
+.card-footer { display: flex; justify-content: space-between; font-size: 0.74rem; }
+.cf-lbl { color: rgba(255,255,255,0.35); font-size: 0.62rem; margin-bottom: 2px; }
+.cf-val { color: white; font-weight: 500; }
+
+/* Recording status bar */
 .rec-bar {
   border-radius: 9px;
   padding: 0.75rem 1rem;
@@ -545,9 +486,9 @@ nav {
   border: 1px solid;
   line-height: 1.4;
 }
-.rec-bar.active { background: #fef9ec; border-color: #fde68a; color: #78350f; }
-.rec-bar.paused { background: #f0fdf4; border-color: #bbf7d0; color: #14532d; }
-.rec-bar.error  { background: #fef2f2; border-color: #fecaca; color: #7f1d1d; }
+.rec-bar.active  { background: #fef9ec; border-color: #fde68a; color: #78350f; }
+.rec-bar.paused  { background: #f0fdf4; border-color: #bbf7d0; color: #14532d; }
+.rec-bar.error   { background: #fef2f2; border-color: #fecaca; color: #7f1d1d; }
 .pulse {
   width: 9px; height: 9px;
   border-radius: 50%;
@@ -556,45 +497,69 @@ nav {
   flex-shrink: 0;
 }
 .pulse.green { background: var(--success); animation: none; }
-.pulse.off   { background: var(--gray);    animation: none; }
-@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.22;} }
+.pulse.gray  { background: var(--gray);    animation: none; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+/* Form fields (payment page) */
+.form-group { margin-bottom: 1rem; }
+.form-group label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 0.35rem;
+}
+.form-group input {
+  width: 100%;
+  padding: 0.68rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: var(--dark);
+  background: #FAFBFC;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-group input:focus {
+  border-color: var(--brand2);
+  box-shadow: 0 0 0 3px rgba(0,114,229,0.1);
+  background: white;
+}
 /* Summary */
 .sum-row {
   display: flex;
   justify-content: space-between;
   font-size: 0.84rem;
-  padding: 0.48rem 0;
+  padding: 0.46rem 0;
   border-bottom: 1px solid #f1f3f7;
   color: var(--gray);
 }
 .sum-row:last-child { border: none; }
-.sum-row.total {
-  font-weight: 700;
-  color: var(--dark);
-  font-size: 0.98rem;
-  padding-top: 0.72rem;
-}
+.sum-row.total { font-weight: 700; color: var(--dark); font-size: 0.97rem; padding-top: 0.7rem; }
 .sum-row.total .amt { color: var(--brand); }
+
 /* Webex status */
-.wx-status { font-size: 0.79rem; }
+.wx-status { font-size: 0.78rem; }
 .wx-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 8px;
-  padding: 0.38rem 0;
+  padding: 0.36rem 0;
   border-bottom: 1px solid #f1f3f7;
 }
 .wx-row:last-child { border: none; }
 .wx-lbl { color: var(--gray); white-space: nowrap; }
-.wx-val { font-weight: 600; color: var(--dark); font-size: 0.76rem; word-break: break-all; text-align: right; }
-.sec-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.9rem; }
+.wx-val { font-weight: 600; color: var(--dark); font-size: 0.75rem; word-break: break-all; text-align: right; }
+
+.sec-row { display: flex; flex-wrap: wrap; gap: 0.42rem; margin-top: 0.9rem; }
 .sec-badge {
   background: var(--cream);
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 3px 9px;
-  font-size: 0.68rem;
+  font-size: 0.67rem;
   color: var(--dark);
   font-weight: 500;
 }
@@ -603,11 +568,18 @@ nav {
   border: 1px solid #bfdbfe;
   border-radius: 9px;
   padding: 0.85rem 1rem;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: #1e40af;
   line-height: 1.7;
 }
-/* Success */
+.info-box code {
+  background: #dbeafe;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.72rem;
+}
+
+/* ─── SUCCESS ─────────────────────────────────────── */
 .success-wrap {
   min-height: calc(100vh - 62px);
   display: flex;
@@ -628,9 +600,7 @@ nav {
   width: 68px; height: 68px;
   background: linear-gradient(135deg, #059669, #34d399);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   margin: 0 auto 1.4rem;
   font-size: 2rem;
   box-shadow: 0 8px 24px rgba(5,150,105,0.28);
@@ -644,29 +614,30 @@ nav {
 }
 .success-card p {
   color: var(--gray);
-  font-size: 0.87rem;
+  font-size: 0.86rem;
   line-height: 1.7;
   margin-bottom: 1.4rem;
 }
 .ref-box {
   background: var(--cream);
   border-radius: 8px;
-  padding: 0.75rem 1rem;
-  font-size: 0.78rem;
+  padding: 0.72rem 1rem;
+  font-size: 0.77rem;
   color: var(--gray);
   margin-bottom: 1.4rem;
 }
-.ref-box strong { color: var(--dark); font-family: monospace; font-size: 0.85rem; }
-/* Toast */
+.ref-box strong { color: var(--dark); font-family: monospace; font-size: 0.84rem; }
+
+/* ─── TOAST ───────────────────────────────────────── */
 #toast {
   position: fixed;
   bottom: 1.8rem; left: 50%;
   transform: translateX(-50%) translateY(20px);
   background: var(--dark);
   color: white;
-  padding: 0.75rem 1.4rem;
+  padding: 0.72rem 1.4rem;
   border-radius: 9px;
-  font-size: 0.83rem;
+  font-size: 0.82rem;
   box-shadow: var(--shadow-lg);
   z-index: 9999;
   opacity: 0;
@@ -681,10 +652,11 @@ nav {
   .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
   .hero-panel { display: none; }
   .payment-grid { grid-template-columns: 1fr; }
-  .auth-card { padding: 1.8rem 1.3rem; }
   nav { padding: 0 1rem; }
-  .hero-text h1 { font-size: 2rem; }
   .nav-product { display: none; }
+  .hero-text h1 { font-size: 2rem; }
+  .setup-card-body { padding: 1.4rem; }
+  .setup-card-header { padding: 1.4rem; }
 }
 ```
 
@@ -692,154 +664,129 @@ nav {
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════
      NAV
-══════════════════════════════════════════════════ -->
+═══════════════════════════════════════════════════ -->
 
 <nav>
   <div class="nav-logo">
-    <!--
-      Logo file: place "CX Advanced Solutions.png" in the same folder as this HTML file.
-      It will display automatically. Falls back to text if file not found.
-    -->
     <img src="CX Advanced Solutions.png" alt="CX Advanced Solutions"
          onerror="this.style.display='none'; document.getElementById('logo-text').style.display='block'" />
-    <span id="logo-text" class="nav-logo-fallback" style="display:none">CX Advanced Solutions</span>
-    <div class="nav-logo-sep"></div>
+    <span id="logo-text" class="nav-logo-text">CX Advanced Solutions</span>
+    <div class="nav-sep"></div>
     <span class="nav-product">Payment System</span>
   </div>
   <div class="nav-right">
-    <div class="nav-user-pill" id="nav-user-pill"></div>
-    <button id="gear-btn" onclick="openConfig()" title="Configure Webex API credentials">
-      ⚙ API Config
-      <span class="gear-dot" id="gear-dot" title="Not configured"></span>
+    <div class="nav-pill" id="nav-pill"></div>
+    <!-- Subtle gear for reconfiguring mid-demo -->
+    <button class="nav-gear" onclick="showPage('setup')" title="Reconfigure credentials">
+      ⚙ <span class="nav-gear-dot" id="gear-dot"></span>
     </button>
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════════════
-     API CONFIG MODAL
-     Opens from nav gear button or any "Configure API" link
-══════════════════════════════════════════════════ -->
-
-<div class="modal-backdrop" id="modal-backdrop" onclick="backdropClick(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>⚙ &nbsp;Webex API Configuration</h3>
-      <button class="modal-close" onclick="closeConfig()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="demo-notice">
-        <strong>Demo Mode</strong> — Paste your Webex credentials below to enable live API calls
-        (pause/resume recording). In production, replace with <strong>OAuth 2.0</strong>.
-        Values are stored in memory only and reset on page reload.
-      </div>
-
-```
-  <div class="cfg-status-row" id="cfg-status-row">
-    <span class="status-dot" id="cfg-dot"></span>
-    <span id="cfg-status-text">Not configured — API calls will simulate (demo mode)</span>
-  </div>
-
-  <div class="cfg-field">
-    <label>Webex Bearer Token</label>
-    <input type="password" id="cfg-token" placeholder="Paste your Bearer token here…" autocomplete="off" />
-    <div class="cfg-hint">Get from developer.webex.com → "Copy personal access token" (valid 12 hrs), or use a Bot token</div>
-  </div>
-
-  <div class="cfg-field">
-    <label>WxCC Org ID</label>
-    <input type="text" id="cfg-org" placeholder="e.g. 1eb65fdf-9643-417f-9974-ad6bfa5e32a3" />
-    <div class="cfg-hint">Control Hub → Organization Settings → Org ID</div>
-  </div>
-
-  <div class="cfg-field">
-    <label>WxCC API Base URL</label>
-    <input type="text" id="cfg-base" placeholder="https://api.wxcc-us1.cisco.com" />
-    <div class="cfg-hint">Region-specific: us1 / eu1 / anz1 / jp1 etc. Leave blank for default (us1)</div>
-  </div>
-
-  <div class="cfg-field">
-    <label>Task / Call ID &nbsp;<span style="text-transform:none;font-weight:400;color:rgba(255,255,255,0.25)">(optional override)</span></label>
-    <input type="text" id="cfg-task" placeholder="Auto-resolved from agent lookup at login" />
-    <div class="cfg-hint">Manually set a task ID to test pause/resume against a specific active call, without going through agent lookup</div>
-  </div>
-</div>
-<div class="modal-footer">
-  <button class="btn-save" onclick="saveConfig()">💾 &nbsp;Save &amp; Close</button>
-</div>
-```
-
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════
      PAGE 1 — LANDING
-══════════════════════════════════════════════════ -->
+═══════════════════════════════════════════════════ -->
 
 <div id="page-landing" class="page active">
   <section class="hero">
-    <div class="hero-grid-bg"></div>
+    <div class="hero-grid"></div>
     <div class="hero-glow"></div>
     <div class="hero-inner">
       <div class="hero-text">
-        <div class="hero-eyebrow">Webex Contact Center Demo</div>
+        <div class="eyebrow">Webex Contact Center Demo</div>
         <h1>Secure, compliant <span>payment collection</span> for contact centers</h1>
-        <p>Demonstrate how Webex Contact Center automatically pauses call recordings during card entry — then resumes when payment is complete — keeping customer data protected and agents PCI compliant.</p>
-        <div class="hero-btns">
-          <button class="btn-primary" onclick="showPage('login')">Start Payment Demo →</button>
-          <button class="btn-ghost" onclick="openConfig()">⚙ Configure API First</button>
-        </div>
+        <p>Automatically pause Webex call recordings the moment card entry begins, then resume when payment is complete — keeping customer data off recordings and agents fully PCI compliant.</p>
+        <button class="btn-primary" onclick="showPage('setup')">
+          Start Demo →
+        </button>
       </div>
       <div class="hero-panel">
-        <div class="hero-panel-label">📋 Demo Flow</div>
-        <div class="flow-row"><span class="flow-lbl">Agent logs in</span><span class="flow-val c-blue">Email → Webex lookup</span></div>
-        <div class="flow-row"><span class="flow-lbl">Active call found</span><span class="flow-val c-blue">Task ID resolved</span></div>
-        <div class="flow-row"><span class="flow-lbl">Card entry starts</span><span class="flow-val c-yellow">Recording PAUSED ⏸</span></div>
-        <div class="flow-row"><span class="flow-lbl">Payment completes</span><span class="flow-val c-green">Recording RESUMED ▶</span></div>
-        <div class="flow-row"><span class="flow-lbl">Card data captured</span><span class="flow-val c-green">Never ✓</span></div>
+        <div class="panel-label">📋 Demo Flow</div>
+        <div class="flow-row"><span class="flow-lbl">Enter email + token</span><span class="c-blue">Agent resolved</span></div>
+        <div class="flow-row"><span class="flow-lbl">Active call found</span><span class="c-blue">Task ID auto-resolved</span></div>
+        <div class="flow-row"><span class="flow-lbl">Card entry begins</span><span class="c-yellow">Recording PAUSED ⏸</span></div>
+        <div class="flow-row"><span class="flow-lbl">Payment completes</span><span class="c-green">Recording RESUMED ▶</span></div>
+        <div class="flow-row"><span class="flow-lbl">Card data captured</span><span class="c-green">Never ✓</span></div>
         <br/>
-        <button class="btn-primary" style="width:100%;justify-content:center;" onclick="showPage('login')">
-          Try the Demo →
-        </button>
+        <button class="btn-primary btn-full" onclick="showPage('setup')">Try the Demo →</button>
       </div>
     </div>
   </section>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     PAGE 2 — LOGIN
-══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════
+     PAGE 2 — SETUP (the entry point for every demo)
+     Just email + bearer token. That's it.
+═══════════════════════════════════════════════════ -->
 
-<div id="page-login" class="page">
-  <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-logo-area">
-        <img src="CX Advanced Solutions.png" alt="CX Advanced Solutions"
-             onerror="this.style.display='none'" />
-        <h2>Agent Sign In</h2>
-        <p>Sign in with your Webex email to begin the payment flow</p>
+<div id="page-setup" class="page">
+  <div class="setup-wrap">
+    <div class="setup-card">
+
+```
+  <div class="setup-card-header">
+    <img src="CX Advanced Solutions.png" alt="CX Advanced Solutions"
+         onerror="this.style.display='none'" />
+    <h2>Connect to Webex</h2>
+    <p>Enter your agent email and Webex Bearer token to begin. The system will automatically look up your active call and handle recording pause/resume.</p>
+  </div>
+
+  <div class="setup-card-body">
+
+    <!-- Inline status messages -->
+    <div class="setup-status" id="setup-status">
+      <span id="setup-status-icon">ℹ️</span>
+      <span id="setup-status-msg"></span>
+    </div>
+
+    <div class="field-group">
+      <label>Agent Email</label>
+      <input type="email" id="s-email" placeholder="you@yourcompany.com"
+             autocomplete="email"
+             onkeydown="if(event.key==='Enter') document.getElementById('s-token').focus()" />
+      <div class="field-hint">Your Webex / WxCC agent email address</div>
+    </div>
+
+    <div class="field-group">
+      <label>Webex Bearer Token</label>
+      <div class="token-wrap">
+        <input type="password" id="s-token" placeholder="Paste your Bearer token…"
+               autocomplete="off"
+               onkeydown="if(event.key==='Enter') startDemo()" />
+        <button class="token-toggle" onclick="toggleTokenVis()" id="tok-toggle">Show</button>
       </div>
-      <div class="form-group">
-        <label>Webex Email / Username</label>
-        <input type="email" id="login-email" placeholder="agent@yourcompany.com" autocomplete="email" />
-        <div class="form-hint">Used to look up your Webex agent profile and active call task ID</div>
+      <div class="field-hint">
+        Get from <strong>developer.webex.com</strong> → "Copy personal access token" (valid 12 hrs),
+        or use a long-lived Bot token for demos.
       </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••" />
-      </div>
-      <button class="btn-primary btn-full" onclick="handleLogin()">Sign In &amp; Continue →</button>
-      <div class="auth-link">
-        <a href="#" onclick="openConfig();return false;">⚙ Configure Webex API</a> before signing in to enable live API calls
-      </div>
+    </div>
+
+    <button class="btn-primary btn-full" id="start-btn" onclick="startDemo()">
+      Connect &amp; Start Demo →
+    </button>
+
+    <div class="setup-divider">how it works</div>
+
+    <div class="api-note">
+      Using your email, the system calls <code>GET /v1/people?email=…</code> to resolve your
+      Webex Agent ID, then <code>GET /v1/contactCenter/tasks</code> to find your active call.
+      Recording is paused automatically via <code>POST …/recording/pause</code> when card entry
+      begins, and resumed with <code>POST …/recording/resume</code> on payment completion.
+      <br/><br/>
+      <strong>No task ID entry needed</strong> — everything resolves from your email + token.
     </div>
   </div>
 </div>
+```
 
-<!-- ══════════════════════════════════════════════════
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
      PAGE 3 — PAYMENT
-══════════════════════════════════════════════════ -->
+═══════════════════════════════════════════════════ -->
 
 <div id="page-payment" class="page">
   <div class="payment-wrap">
@@ -855,21 +802,23 @@ nav {
 </div>
 
 <div class="payment-grid">
+
   <!-- LEFT — Payment form -->
   <div>
     <div class="card-box">
       <h3>💳 Card Details</h3>
+
       <div class="card-visual">
         <div class="card-issuer">CXAS Secure Payment</div>
         <div class="card-num" id="card-display">•••• &nbsp;•••• &nbsp;•••• &nbsp;••••</div>
         <div class="card-footer">
           <div>
-            <div class="card-footer-lbl">CARDHOLDER</div>
-            <div class="card-footer-val" id="card-name-disp">FULL NAME</div>
+            <div class="cf-lbl">CARDHOLDER</div>
+            <div class="cf-val" id="card-name-disp">FULL NAME</div>
           </div>
           <div>
-            <div class="card-footer-lbl">EXPIRES</div>
-            <div class="card-footer-val" id="card-exp-disp">MM/YY</div>
+            <div class="cf-lbl">EXPIRES</div>
+            <div class="cf-val" id="card-exp-disp">MM/YY</div>
           </div>
         </div>
       </div>
@@ -921,21 +870,25 @@ nav {
     <div class="card-box">
       <h3>📡 Webex API Status</h3>
       <div class="wx-status">
-        <div class="wx-row"><span class="wx-lbl">Agent Email</span><span class="wx-val" id="st-email">—</span></div>
-        <div class="wx-row"><span class="wx-lbl">Agent ID</span><span class="wx-val" id="st-agent">—</span></div>
-        <div class="wx-row"><span class="wx-lbl">Task ID</span><span class="wx-val" id="st-task">—</span></div>
-        <div class="wx-row"><span class="wx-lbl">Recording</span><span class="wx-val" id="st-rec">Active ●</span></div>
-        <div class="wx-row"><span class="wx-lbl">Mode</span><span class="wx-val" id="st-mode">Demo</span></div>
+        <div class="wx-row"><span class="wx-lbl">Agent Email</span>  <span class="wx-val" id="st-email">—</span></div>
+        <div class="wx-row"><span class="wx-lbl">Agent ID</span>     <span class="wx-val" id="st-agent">—</span></div>
+        <div class="wx-row"><span class="wx-lbl">Task ID</span>      <span class="wx-val" id="st-task">—</span></div>
+        <div class="wx-row"><span class="wx-lbl">Recording</span>    <span class="wx-val" id="st-rec">Active ●</span></div>
+        <div class="wx-row"><span class="wx-lbl">Mode</span>         <span class="wx-val" id="st-mode">—</span></div>
       </div>
-      <div style="margin-top:1rem;">
-        <button onclick="openConfig()" style="width:100%;background:var(--cream);border:1.5px solid var(--border);padding:0.5rem;border-radius:7px;font-size:0.77rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--dark);font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px;">
-          ⚙ Edit API Config
+      <div style="margin-top:0.9rem;">
+        <button onclick="showPage('setup')"
+          style="width:100%;background:var(--cream);border:1.5px solid var(--border);padding:0.48rem;border-radius:7px;font-size:0.76rem;cursor:pointer;font-family:'Inter',sans-serif;color:var(--dark);font-weight:600;">
+          ⚙ Reconfigure
         </button>
       </div>
     </div>
 
     <div class="card-box info-box" style="padding:0.9rem 1rem;">
-      <strong>🔐 How it works:</strong> When "Complete Payment" is clicked, a <code>POST /recording/pause</code> fires to WxCC using the task ID resolved at login. On completion, <code>POST /recording/resume</code> is called — card data is never captured in the recording.
+      <strong>🔐 How it works:</strong> On card field focus,
+      <code>POST …/recording/pause</code> fires against the task ID resolved from your email.
+      On payment completion, <code>POST …/recording/resume</code> is called automatically.
+      No card data is ever captured in the recording.
     </div>
   </div>
 </div>
@@ -944,9 +897,9 @@ nav {
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════
      PAGE 4 — SUCCESS
-══════════════════════════════════════════════════ -->
+═══════════════════════════════════════════════════ -->
 
 <div id="page-success" class="page">
   <div class="success-wrap">
@@ -954,11 +907,11 @@ nav {
       <div class="success-icon">✓</div>
       <h2>Payment Complete!</h2>
       <p>
-        Your payment of <strong>$15.74</strong> was processed successfully.<br/>
+        Payment of <strong>$15.74</strong> processed successfully.<br/>
         Confirmation sent to <strong id="s-email">—</strong>
       </p>
       <div class="ref-box">Reference #: <strong id="s-ref">—</strong></div>
-      <div class="rec-bar paused" style="text-align:left;margin-bottom:1.5rem;">
+      <div class="rec-bar paused" style="text-align:left; margin-bottom:1.5rem;">
         <div class="pulse green"></div>
         <span>Call recording has been <strong>resumed</strong>. Card data was not captured.</span>
       </div>
@@ -967,225 +920,258 @@ nav {
   </div>
 </div>
 
-<!-- Toast -->
-
 <div id="toast"></div>
 
-<!-- ══════════════════════════════════════════════════
-     JAVASCRIPT — Webex Integration
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
 
-     QUICK START:
-     1. Click "⚙ API Config" in the nav bar
-     2. Paste your Webex Bearer token + Org ID
-     3. Optionally override the Task ID for testing
-     4. Sign in with an agent email to run the demo
+     FLOW:
+       startDemo()
+         → lookupAgentByEmail(email, token)   [Webex People API]
+         → findActiveTask(agentId, token)      [WxCC Tasks API]
+         → showPage('payment')
 
-     API CALL ORDER:
-       Login  → lookupAgentByEmail() → findActiveTask()
-       Pay    → pauseRecording()     (fires on card focus too)
-       Done   → resumeRecording()
+       triggerPause()  — fires on first card field focus
+         → pauseRecording(taskId, token)       [WxCC recording/pause]
 
-     For production: move all API calls to a server-side
-     proxy and use OAuth 2.0 — never expose tokens client-side.
-══════════════════════════════════════════════════ -->
+       handlePayment()
+         → pauseRecording()  (idempotent — skips if already paused)
+         → [process payment]
+         → resumeRecording(taskId, token)      [WxCC recording/resume]
+         → showPage('success')
+
+     ENDPOINTS TO VERIFY WITH YOUR WxCC VERSION:
+       Agent lookup:  GET  https://webexapis.com/v1/people?email={email}
+       Task lookup:   GET  {baseUrl}/v1/contactCenter/tasks?agentId={id}&state=active
+       Pause:         POST {baseUrl}/v1/contactCenter/tasks/{taskId}/recording/pause
+       Resume:        POST {baseUrl}/v1/contactCenter/tasks/{taskId}/recording/resume
+
+     REGION BASE URLS:
+       US:   https://api.wxcc-us1.cisco.com
+       EU:   https://api.wxcc-eu1.cisco.com
+       ANZ:  https://api.wxcc-anz1.cisco.com
+       JP:   https://api.wxcc-jp1.cisco.com
+═══════════════════════════════════════════════════ -->
 
 <script>
-/* ── Runtime config (populated by modal) ──────── */
-const CFG = {
+/* ── Session state ────────────────────────────────── */
+const APP = {
+  email:   '',
   token:   '',
-  orgId:   '',
-  baseUrl: 'https://api.wxcc-us1.cisco.com',
+  agentId: '',
   taskId:  '',
+  paused:  false,
+  live:    false,   // true = real token provided
+  baseUrl: 'https://api.wxcc-us1.cisco.com',
 };
 
-/* ── App state ────────────────────────────────── */
-const APP = { email:'', agentId:'', taskId:'', paused:false };
-
-/* ── Routing ──────────────────────────────────── */
+/* ── Routing ──────────────────────────────────────── */
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   window.scrollTo(0, 0);
 }
 
-/* ── Config modal ─────────────────────────────── */
-function openConfig() {
-  document.getElementById('cfg-token').value = CFG.token;
-  document.getElementById('cfg-org').value   = CFG.orgId;
-  document.getElementById('cfg-base').value  = CFG.baseUrl !== 'https://api.wxcc-us1.cisco.com' ? CFG.baseUrl : '';
-  document.getElementById('cfg-task').value  = CFG.taskId;
-  document.getElementById('modal-backdrop').classList.add('open');
-}
-function closeConfig() {
-  document.getElementById('modal-backdrop').classList.remove('open');
-}
-function backdropClick(e) {
-  if (e.target.id === 'modal-backdrop') closeConfig();
-}
-function saveConfig() {
-  CFG.token  = document.getElementById('cfg-token').value.trim();
-  CFG.orgId  = document.getElementById('cfg-org').value.trim();
-  CFG.baseUrl= document.getElementById('cfg-base').value.trim() || 'https://api.wxcc-us1.cisco.com';
-  CFG.taskId = document.getElementById('cfg-task').value.trim();
-  if (CFG.taskId) APP.taskId = CFG.taskId;
-
-  const live = !!(CFG.token && CFG.orgId);
-  document.getElementById('gear-dot').className       = 'gear-dot' + (live ? ' ok' : '');
-  document.getElementById('cfg-dot').className        = 'status-dot' + (live ? ' ok' : '');
-  document.getElementById('cfg-status-text').textContent = live
-    ? '✅ Configured — live Webex API calls enabled'
-    : 'Not configured — running in demo/simulation mode';
-  document.getElementById('st-mode').textContent = live ? 'Live ✓' : 'Demo';
-  closeConfig();
-  showToast(live ? '✅ API config saved — live mode enabled' : '⚠️ Saved (demo mode — no token/org entered)');
+/* ── Token show/hide ──────────────────────────────── */
+function toggleTokenVis() {
+  const inp = document.getElementById('s-token');
+  const btn = document.getElementById('tok-toggle');
+  if (inp.type === 'password') { inp.type = 'text';     btn.textContent = 'Hide'; }
+  else                         { inp.type = 'password'; btn.textContent = 'Show'; }
 }
 
-/* ── Login handler ────────────────────────────── */
-async function handleLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pass  = document.getElementById('login-password').value;
-  if (!email) { showToast('⚠️ Please enter your email'); return; }
-  if (!pass)  { showToast('⚠️ Please enter your password'); return; }
+/* ── Setup status messages ────────────────────────── */
+function setStatus(type, msg) {
+  const el  = document.getElementById('setup-status');
+  const ico = document.getElementById('setup-status-icon');
+  const txt = document.getElementById('setup-status-msg');
+  const icons = { info: 'ℹ️', error: '⚠️', success: '✅' };
+  el.className  = 'setup-status ' + type;
+  ico.textContent = icons[type] || 'ℹ️';
+  txt.textContent = msg;
+}
+function clearStatus() {
+  document.getElementById('setup-status').className = 'setup-status';
+}
+
+/* ═══════════════════════════════════════════════════
+   ENTRY POINT — called when user clicks "Connect"
+═══════════════════════════════════════════════════ */
+async function startDemo() {
+  const email = document.getElementById('s-email').value.trim();
+  const token = document.getElementById('s-token').value.trim();
+
+  if (!email) { setStatus('error', 'Please enter your agent email address.'); return; }
+  if (!token) { setStatus('error', 'Please paste your Webex Bearer token.'); return; }
 
   APP.email = email;
-  document.getElementById('nav-user-pill').textContent = email;
-  document.getElementById('nav-user-pill').style.display = 'block';
+  APP.token = token;
+  APP.live  = true;
+  APP.paused = false;
 
-  showToast('🔍 Looking up Webex agent profile…');
+  // Show loading state
+  const btn = document.getElementById('start-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Connecting to Webex…';
+  setStatus('info', 'Looking up your Webex agent profile…');
+
   try {
-    await lookupAgentByEmail(email);
-    await findActiveTask(APP.agentId);
-  } catch(e) {
-    console.warn('[Webex] Lookup failed, continuing demo mode:', e.message);
-    APP.agentId = APP.agentId || 'demo-agent-id';
-    APP.taskId  = APP.taskId  || CFG.taskId || 'DEMO-' + Math.random().toString(36).slice(2,8).toUpperCase();
-    showToast('⚠️ API lookup failed — continuing in demo mode');
-  }
+    /* ── Step 1: Resolve agent ID from email ── */
+    await lookupAgentByEmail(email, token);
+    setStatus('info', `Agent found. Searching for your active call…`);
 
-  updateStatusPanel();
-  showPage('payment');
+    /* ── Step 2: Find active call/task ── */
+    await findActiveTask(APP.agentId, token);
+
+    setStatus('success', `Ready! Active call found (Task: ${APP.taskId.slice(0,14)}…). Proceeding to payment.`);
+    await sleep(800);
+
+    // Update nav pill and gear dot
+    document.getElementById('nav-pill').textContent = email;
+    document.getElementById('nav-pill').style.display = 'block';
+    document.getElementById('gear-dot').className = 'nav-gear-dot ok';
+
+    updateStatusPanel();
+    showPage('payment');
+
+  } catch(e) {
+    console.error('[Webex]', e.message);
+
+    // Friendly error messages based on what failed
+    if (e.message.includes('401')) {
+      setStatus('error', 'Invalid or expired Bearer token. Get a fresh one from developer.webex.com.');
+    } else if (e.message.includes('no agent') || e.message.includes('No user')) {
+      setStatus('error', `No Webex user found for "${email}". Check the email address.`);
+    } else if (e.message.includes('no active') || e.message.includes('No active')) {
+      setStatus('error', 'Agent found but no active call detected. Make sure a call is in progress in WxCC.');
+    } else if (e.message.includes('Failed to fetch') || e.message.includes('NetworkError')) {
+      setStatus('error', 'Network error — check CORS settings or run via a proxy. See console for details.');
+    } else {
+      setStatus('error', `API error: ${e.message}. Check the browser console for details.`);
+    }
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Connect &amp; Start Demo →';
+  }
 }
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    API CALL 1 — Lookup Agent by Email
    GET https://webexapis.com/v1/people?email={email}
-══════════════════════════════════════════════ */
-async function lookupAgentByEmail(email) {
-  if (!CFG.token) {
-    console.log('[Demo] No token — skipping agent lookup');
-    APP.agentId = 'demo-agent-id';
-    return;
-  }
-  const res = await fetch(`https://webexapis.com/v1/people?email=${encodeURIComponent(email)}`, {
-    headers: { 'Authorization': `Bearer ${CFG.token}`, 'Content-Type': 'application/json' }
-  });
-  if (!res.ok) throw new Error(`People API ${res.status}`);
-  const data   = await res.json();
+═══════════════════════════════════════════════════ */
+async function lookupAgentByEmail(email, token) {
+  const res = await fetch(
+    `https://webexapis.com/v1/people?email=${encodeURIComponent(email)}`,
+    { headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } }
+  );
+
+  if (res.status === 401) throw new Error('401 - Invalid token');
+  if (!res.ok) throw new Error(`People API ${res.status} ${res.statusText}`);
+
+  const data = await res.json();
   const person = data.items?.[0];
-  if (!person) throw new Error(`No Webex user found for ${email}`);
+  if (!person) throw new Error(`No user found for ${email}`);
+
   APP.agentId = person.id;
-  console.log('[Webex] Agent:', person.displayName, person.id);
-  showToast(`👤 Agent found: ${person.displayName}`);
+  console.log('[Webex] ✅ Agent:', person.displayName, '→ ID:', person.id);
+  showToast(`👤 ${person.displayName}`);
 }
 
-/* ══════════════════════════════════════════════
-   API CALL 2 — Find Active Task (Call)
+/* ═══════════════════════════════════════════════════
+   API CALL 2 — Find Active Task (Call) from Agent ID
    GET {baseUrl}/v1/contactCenter/tasks?agentId={id}&state=active
 
-   ⚠️  Verify this endpoint for your WxCC version.
-   See: developer.webex.com/docs/contact-center
-══════════════════════════════════════════════ */
-async function findActiveTask(agentId) {
-  if (CFG.taskId) { APP.taskId = CFG.taskId; return; } // manual override
-  if (!CFG.token || agentId === 'demo-agent-id') {
-    APP.taskId = 'DEMO-' + Math.random().toString(36).slice(2,8).toUpperCase();
-    return;
-  }
-  // ── Replace path if your WxCC uses a different endpoint ──
-  const url = `${CFG.baseUrl}/v1/contactCenter/tasks?agentId=${encodeURIComponent(agentId)}&state=active`;
+   ⚠️  Verify this endpoint path for your WxCC version.
+       Some deployments use different query params or paths.
+       Ref: developer.webex.com/docs/contact-center
+═══════════════════════════════════════════════════ */
+async function findActiveTask(agentId, token) {
+  const url = `${APP.baseUrl}/v1/contactCenter/tasks?agentId=${encodeURIComponent(agentId)}&state=active`;
+
   const res = await fetch(url, {
-    headers: { 'Authorization': `Bearer ${CFG.token}`, 'Content-Type': 'application/json' }
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
   });
-  if (!res.ok) throw new Error(`Tasks API ${res.status}`);
+
+  if (res.status === 401) throw new Error('401 - Invalid token');
+  if (!res.ok) throw new Error(`Tasks API ${res.status} ${res.statusText}`);
+
   const data = await res.json();
-  const task = data.data?.[0] || data.items?.[0];
-  if (!task) throw new Error('No active task found');
+  // Handle both common WxCC response shapes
+  const task = data.data?.[0] || data.items?.[0] || data.tasks?.[0];
+  if (!task) throw new Error('No active call found for this agent');
+
   APP.taskId = task.id;
-  console.log('[Webex] Task ID:', APP.taskId);
+  console.log('[Webex] ✅ Active task:', APP.taskId);
 }
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    API CALL 3 — Pause Recording
    POST {baseUrl}/v1/contactCenter/tasks/{taskId}/recording/pause
    Body: { "reason": "PCI_PAYMENT" }
 
-   ⚠️  Confirm endpoint with your Cisco WxCC docs
-══════════════════════════════════════════════ */
+   ⚠️  Confirm endpoint with your Cisco WxCC docs/TAC
+═══════════════════════════════════════════════════ */
 async function pauseRecording() {
-  if (APP.paused) return;
+  if (APP.paused) return; // idempotent
+
   console.log('[Webex] Pausing recording → Task:', APP.taskId);
 
-  if (CFG.token && APP.taskId && !APP.taskId.startsWith('DEMO-')) {
-    try {
-      const res = await fetch(`${CFG.baseUrl}/v1/contactCenter/tasks/${APP.taskId}/recording/pause`, {
+  try {
+    const res = await fetch(
+      `${APP.baseUrl}/v1/contactCenter/tasks/${APP.taskId}/recording/pause`,
+      {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${CFG.token}`, 'Content-Type': 'application/json' },
+        headers: { 'Authorization': `Bearer ${APP.token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: 'PCI_PAYMENT' })
-      });
-      if (!res.ok) throw new Error(`Pause ${res.status}`);
-      console.log('[Webex] ✅ Recording paused via API');
-    } catch(e) {
-      console.error('[Webex] Pause failed:', e.message);
-      setRecBar('error', '⚠️ Could not pause recording — check API config and task ID');
-      showToast('⚠️ Pause API failed — see browser console');
-      return;
-    }
-  } else {
-    console.log('[Demo] Simulating recording pause');
-    await sleep(350);
+      }
+    );
+    if (!res.ok) throw new Error(`Pause API ${res.status}`);
+    console.log('[Webex] ✅ Recording paused');
+  } catch(e) {
+    console.error('[Webex] Pause failed:', e.message);
+    setRecBar('error', `⚠️ Could not pause recording: ${e.message}`);
+    showToast('⚠️ Pause failed — see console');
+    return; // don't mark as paused if it failed
   }
 
   APP.paused = true;
-  setRecBar('paused', '⏸ Recording PAUSED — card details are protected from recording');
+  setRecBar('paused', '⏸ Recording PAUSED — card details are protected');
   document.getElementById('st-rec').textContent = 'Paused ⏸';
-  showToast('⏸ Recording paused — safe to enter card details');
+  showToast('⏸ Recording paused');
 }
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════
    API CALL 4 — Resume Recording
    POST {baseUrl}/v1/contactCenter/tasks/{taskId}/recording/resume
    Body: { "reason": "PAYMENT_COMPLETE" }
-══════════════════════════════════════════════ */
+═══════════════════════════════════════════════════ */
 async function resumeRecording() {
   console.log('[Webex] Resuming recording → Task:', APP.taskId);
-
-  if (CFG.token && APP.taskId && !APP.taskId.startsWith('DEMO-')) {
-    try {
-      const res = await fetch(`${CFG.baseUrl}/v1/contactCenter/tasks/${APP.taskId}/recording/resume`, {
+  try {
+    const res = await fetch(
+      `${APP.baseUrl}/v1/contactCenter/tasks/${APP.taskId}/recording/resume`,
+      {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${CFG.token}`, 'Content-Type': 'application/json' },
+        headers: { 'Authorization': `Bearer ${APP.token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: 'PAYMENT_COMPLETE' })
-      });
-      if (!res.ok) throw new Error(`Resume ${res.status}`);
-      console.log('[Webex] ✅ Recording resumed via API');
-    } catch(e) {
-      console.error('[Webex] Resume failed:', e.message);
-      showToast('⚠️ Resume API failed — see browser console');
-    }
-  } else {
-    console.log('[Demo] Simulating recording resume');
-    await sleep(300);
+      }
+    );
+    if (!res.ok) throw new Error(`Resume API ${res.status}`);
+    console.log('[Webex] ✅ Recording resumed');
+  } catch(e) {
+    console.error('[Webex] Resume failed:', e.message);
+    showToast('⚠️ Resume failed — see console');
   }
-
   APP.paused = false;
   document.getElementById('st-rec').textContent = 'Resumed ▶';
 }
 
-/* ── Payment flow ─────────────────────────────── */
+/* ── Triggered on first card field focus ─────────── */
 function triggerPause() {
-  pauseRecording(); // auto-pause on first card field focus
+  pauseRecording();
 }
 
+/* ── Payment submit ───────────────────────────────── */
 async function handlePayment() {
   const name = document.getElementById('f-name').value.trim();
   const num  = document.getElementById('f-num').value.trim();
@@ -1193,15 +1179,16 @@ async function handlePayment() {
   const cvv  = document.getElementById('f-cvv').value.trim();
   if (!name || !num || !exp || !cvv) { showToast('⚠️ Please fill in all card fields'); return; }
 
-  await pauseRecording(); // ensure paused before processing
+  // Guarantee paused before processing
+  await pauseRecording();
 
   const btn = document.getElementById('pay-btn');
-  btn.textContent = '⏳ Processing payment…';
-  btn.disabled = true;
-  showToast('💳 Processing…');
-  await sleep(2200);
+  btn.innerHTML = '<span class="spinner"></span> Processing…';
+  btn.disabled  = true;
 
-  await resumeRecording(); // resume after done
+  await sleep(2200); // simulates payment gateway call
+
+  await resumeRecording();
 
   document.getElementById('s-email').textContent = APP.email;
   document.getElementById('s-ref').textContent   = 'CXAS-' + Date.now().toString(36).toUpperCase();
@@ -1209,50 +1196,57 @@ async function handlePayment() {
   showToast('✅ Payment complete — recording resumed');
 }
 
-/* ── UI helpers ───────────────────────────────── */
+/* ── UI helpers ───────────────────────────────────── */
 function setRecBar(state, msg) {
   document.getElementById('rec-bar').className = 'rec-bar ' + state;
-  document.getElementById('rec-pulse').className = 'pulse' + (state==='paused'?' green':state==='error'?' off':'');
+  const dot = document.getElementById('rec-pulse');
+  dot.className = 'pulse' + (state === 'paused' ? ' green' : state === 'error' ? ' gray' : '');
   document.getElementById('rec-text').textContent = msg;
 }
+
 function updateStatusPanel() {
-  document.getElementById('st-email').textContent = APP.email || '—';
-  document.getElementById('st-agent').textContent = APP.agentId
-    ? (APP.agentId.length > 22 ? APP.agentId.slice(0,22)+'…' : APP.agentId) : '—';
-  document.getElementById('st-task').textContent  = APP.taskId || '—';
-  document.getElementById('st-mode').textContent  = CFG.token ? 'Live ✓' : 'Demo';
+  const shortId = id => id ? (id.length > 20 ? id.slice(0,20) + '…' : id) : '—';
+  document.getElementById('st-email').textContent = APP.email;
+  document.getElementById('st-agent').textContent = shortId(APP.agentId);
+  document.getElementById('st-task').textContent  = shortId(APP.taskId);
+  document.getElementById('st-rec').textContent   = 'Active ●';
+  document.getElementById('st-mode').textContent  = APP.live ? 'Live ✓' : 'Demo';
 }
+
 function resetDemo() {
-  Object.assign(APP, {email:'', agentId:'', taskId:'', paused:false});
-  ['login-email','login-password','f-name','f-num','f-exp','f-cvv'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('pay-btn').textContent = '🔒 Complete Payment';
-  document.getElementById('pay-btn').disabled = false;
-  document.getElementById('nav-user-pill').style.display = 'none';
+  Object.assign(APP, { email:'', token:'', agentId:'', taskId:'', paused:false, live:false });
+  ['f-name','f-num','f-exp','f-cvv'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('s-email').value = '';
+  document.getElementById('s-token').value = '';
+  document.getElementById('pay-btn').innerHTML = '🔒 &nbsp;Complete Payment';
+  document.getElementById('pay-btn').disabled  = false;
+  document.getElementById('nav-pill').style.display = 'none';
+  document.getElementById('gear-dot').className = 'nav-gear-dot';
   document.getElementById('card-name-disp').textContent = 'FULL NAME';
-  document.getElementById('card-exp-disp').textContent = 'MM/YY';
-  document.getElementById('card-display').textContent = '•••• \u00A0•••• \u00A0•••• \u00A0••••';
+  document.getElementById('card-exp-disp').textContent  = 'MM/YY';
+  document.getElementById('card-display').textContent   = '•••• \u00A0•••• \u00A0•••• \u00A0••••';
   setRecBar('active', '🔴 Call recording is active — will pause automatically when you begin entering card details');
-  showPage('landing');
+  clearStatus();
+  showPage('setup');
 }
-function showToast(msg, ms=3500) {
+
+function showToast(msg, ms = 3200) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(window._t);
   window._t = setTimeout(() => t.classList.remove('show'), ms);
 }
+
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-/* ── Card input formatters ────────────────────── */
+/* ── Card formatters ──────────────────────────────── */
 function fmtCardNum(inp) {
   let v = inp.value.replace(/\D/g,'').slice(0,16);
   inp.value = v.match(/.{1,4}/g)?.join(' ') || v;
-  const d = v.length > 0
-    ? v.slice(0,4).padEnd(4,'•') + ' •••• •••• ' + (v.slice(12)||'••••')
-    : '•••• •••• •••• ••••';
-  document.getElementById('card-display').textContent = d;
+  document.getElementById('card-display').textContent =
+    v.length ? v.slice(0,4).padEnd(4,'•') + ' •••• •••• ' + (v.slice(12)||'••••')
+             : '•••• •••• •••• ••••';
 }
 function fmtExpiry(inp) {
   let v = inp.value.replace(/\D/g,'').slice(0,4);
