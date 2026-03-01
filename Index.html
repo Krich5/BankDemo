@@ -770,12 +770,9 @@ nav {
     <div class="setup-divider">how it works</div>
 
     <div class="api-note">
-      Using your email, the system calls <code>GET /v1/people?email=…</code> to resolve your
-      Webex Agent ID, then <code>GET /v1/contactCenter/tasks</code> to find your active call.
-      Recording is paused automatically via <code>POST …/recording/pause</code> when card entry
-      begins, and resumed with <code>POST …/recording/resume</code> on payment completion.
-      <br/><br/>
-      <strong>No task ID entry needed</strong> — everything resolves from your email + token.
+      Enter your agent email and Bearer token — the system automatically looks up your
+      Webex agent profile and active call, then handles recording pause/resume with no
+      additional setup required. <strong>Just email + token.</strong>
     </div>
   </div>
 </div>
@@ -946,11 +943,6 @@ nav {
        Pause:         POST {baseUrl}/v1/contactCenter/tasks/{taskId}/recording/pause
        Resume:        POST {baseUrl}/v1/contactCenter/tasks/{taskId}/recording/resume
 
-     REGION BASE URLS:
-       US:   https://api.wxcc-us1.cisco.com
-       EU:   https://api.wxcc-eu1.cisco.com
-       ANZ:  https://api.wxcc-anz1.cisco.com
-       JP:   https://api.wxcc-jp1.cisco.com
 ═══════════════════════════════════════════════════ -->
 
 <script>
@@ -962,7 +954,7 @@ const APP = {
   taskId:  '',
   paused:  false,
   live:    false,   // true = real token provided
-  baseUrl: 'https://api.wxcc-us1.cisco.com',
+  baseUrl: 'https://api.wxcc-us1.cisco.com', // US1 hardcoded
 };
 
 /* ── Routing ──────────────────────────────────────── */
